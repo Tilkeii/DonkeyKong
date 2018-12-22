@@ -12,18 +12,17 @@ EntityManager::~EntityManager()
 {
 }
 
-std::shared_ptr<Entity> EntityManager::GetPlayer()
+std::shared_ptr<PlayerCharacter> EntityManager::GetPlayer()
 {
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
 	{
-		if (entity->m_enabled == false)
+		if (entity->GetEnable() == false)
 		{
 			continue;
 		}
 
-		if (entity->m_type == EntityType::player)
-		{
-			return entity;
+		if (PlayerCharacter* p = dynamic_cast<PlayerCharacter*>(entity.get())) {
+			return std::shared_ptr<PlayerCharacter>(p);
 		}
 	}
 
