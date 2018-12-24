@@ -2,10 +2,13 @@
 #include "Echelle.h"
 
 
-Echelle::Echelle()
+Echelle::Echelle(sf::Texture text) : Entity(text)
 {
 }
 
+Echelle::Echelle(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
+{
+}
 
 Echelle::~Echelle()
 {

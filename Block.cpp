@@ -1,11 +1,13 @@
 #include "pch.h"
 #include "Block.h"
 
-
-Block::Block()
+Block::Block(sf::Texture text) : Entity(text)
 {
 }
 
+Block::Block(sf::Texture text, sf::Vector2f pos) : Entity(text, pos) {
+
+}
 
 Block::~Block()
 {

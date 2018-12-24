@@ -4,7 +4,8 @@
 class Block : public Entity
 {
 public:
-	Block();
+	Block(sf::Texture text);
+	Block(sf::Texture text, sf::Vector2f pos);
 	~Block();
 
 	virtual void Update(sf::Time elapsedTime);

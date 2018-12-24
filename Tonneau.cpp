@@ -1,11 +1,14 @@
 #include "pch.h"
 #include "Tonneau.h"
 
-
-Tonneau::Tonneau()
+Tonneau::Tonneau(sf::Texture text) : Entity(text)
 {
 }
 
+Tonneau::Tonneau(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
+{
+
+}
 
 Tonneau::~Tonneau()
 {

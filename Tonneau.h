@@ -4,7 +4,8 @@
 class Tonneau : public Entity
 {
 public:
-	Tonneau();
+	Tonneau(sf::Texture text);
+	Tonneau(sf::Texture text, sf::Vector2f pos);
 	~Tonneau();
 
 	virtual void Update(sf::Time elapsedTime);

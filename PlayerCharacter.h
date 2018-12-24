@@ -4,7 +4,8 @@
 class PlayerCharacter : public Entity
 {
 public:
-	PlayerCharacter();
+	PlayerCharacter(sf::Texture text);
+	PlayerCharacter(sf::Texture text, sf::Vector2f pos);
 	~PlayerCharacter();
 	
 	virtual void Update(sf::Time elapsedTime);
@@ -12,15 +13,15 @@ public:
 	void Jump();
 	void Attack();
 	void GetHurt();
-	sf::Vector2f Move(sf::Vector2f vec);
-	sf::Vector2f AddVelocity(sf::Vector2f vec);
+	void Move(sf::Vector2f vec);
+	void AddVelocity(sf::Vector2f vec);
 
 	void SetMaxVelocity(sf::Vector2f velocity);
 
 private:
 	// Player Character movement
 	int m_lives;
-	float m_playerSpeed;
+	float m_playerSpeed = 100.f;
 	sf::Vector2f m_velocity;
 	sf::Vector2f m_maxVelocity;
 	sf::Vector2f m_jumpVelocity;

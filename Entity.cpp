@@ -1,8 +1,16 @@
 #include "pch.h"
 #include "Entity.h"
 
-Entity::Entity() {
+Entity::Entity(sf::Texture text) {
+	m_texture = text;
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(sf::Vector2f(0.f, 0.f));
+}
 
+Entity::Entity(sf::Texture text, sf::Vector2f pos) {
+	m_texture = text;
+	m_sprite.setTexture(m_texture);
+	m_sprite.setPosition(pos);
 }
 
 Entity::~Entity() {
@@ -21,22 +29,14 @@ void Entity::HandleCollision()
 {
 }
 
-void Entity::SetTexture(sf::Texture texture){ m_texture = texture; }
-
-void Entity::SetSprite(sf::Sprite sprite) { m_sprite = sprite; }
-
-void Entity::SetSize(sf::Vector2u size) { m_size = size; }
-
-void Entity::SetPosition(sf::Vector2f position) { m_position = position; }
+void Entity::SetPosition(sf::Vector2f position) {  }
 
 void Entity::SetEnable(bool enable) { m_enabled = enable; }
 
-sf::Texture Entity::GetTexture() { return sf::Texture(); }
+sf::Texture Entity::GetTexture() { return m_texture; }
 
-sf::Sprite Entity::GetSprite() { return sf::Sprite(); }
-
-sf::Vector2u Entity::GetSize() { return sf::Vector2u(); }
+sf::Sprite Entity::GetSprite() { return m_sprite; }
 
 sf::Vector2f Entity::GetPosition() { return sf::Vector2f(); }
 
-bool Entity::GetEnable() { return false; }
+bool Entity::GetEnable() { return m_enabled; }

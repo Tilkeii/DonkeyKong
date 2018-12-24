@@ -1,6 +1,9 @@
 #include "pch.h"
 #include "StringHelpers.h"
 #include "Game.h"
+#include "Block.h"
+#include "Echelle.h"
+#include "PlayerCharacter.h"
 #include "EntityManager.h"
 
 const sf::Vector2f GRAVITY = sf::Vector2f(0.f, 9.81f);
@@ -17,59 +20,43 @@ Game::Game()
 
 	// Draw blocks
 
-	_TextureBlock.loadFromFile("Media/Textures/Block.png");
-	_sizeBlock = _TextureBlock.getSize();
+	sf::Texture textBlock;
+	textBlock.loadFromFile("Media/Textures/Block.png");
+	sf::Vector2u sizeBlock = textBlock.getSize();
 
 	for (int i = 0; i < BLOCK_COUNT_X; i++)
 	{
 		for (int j = 0; j < BLOCK_COUNT_Y; j++)
 		{
-			_Block[i][j].setTexture(_TextureBlock);
-			_Block[i][j].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
+			sf::Vector2f pos = sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (j + 1));
+			std::shared_ptr<Block> block = std::make_shared<Block>(textBlock, pos);
 
-			std::shared_ptr<Entity> se = std::make_shared<Entity>();
-			se->m_sprite = _Block[i][j];
-			se->m_type = EntityType::block;
-			se->m_size = _TextureBlock.getSize();
-			se->m_position = _Block[i][j].getPosition();
-			EntityManager::m_Entities.push_back(se);
+			EntityManager::m_Entities.push_back(block);
 		}
 	}
 
 	// Draw Echelles
-
-	_TextureEchelle.loadFromFile("Media/Textures/Echelle.png");
+	sf::Texture textEchelle;
+	textEchelle.loadFromFile("Media/Textures/Echelle.png");
 
 	for (int i = 0; i < ECHELLE_COUNT; i++)
 	{
-		_Echelle[i].setTexture(_TextureEchelle);
-		_Echelle[i].setPosition(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + _sizeBlock.y );
+		sf::Vector2f pos = sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y);
+		std::shared_ptr<Echelle> echelle = std::make_shared<Echelle>(textEchelle, pos);
 
-		std::shared_ptr<Entity> se = std::make_shared<Entity>();
-		se->m_sprite = _Echelle[i];
-		se->m_type = EntityType::echelle;
-		se->m_size = _TextureEchelle.getSize();
-		se->m_position = _Echelle[i].getPosition();
-		EntityManager::m_Entities.push_back(se);
+		EntityManager::m_Entities.push_back(echelle);
 	}
 
 	// Draw Mario
 
-	mTexture.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
-	_sizeMario = mTexture.getSize();
-	mPlayer.setTexture(mTexture);
-	sf::Vector2f posMario;
-	posMario.x = 100.f + 70.f;
-	posMario.y = BLOCK_SPACE * 5 - _sizeMario.y;
+	sf::Texture textMario;
+	textMario.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
+	sf::Vector2u sizeMario = textMario.getSize();
 
-	mPlayer.setPosition(posMario);
+	sf::Vector2f pos = sf::Vector2f(100.f + 70.f, BLOCK_SPACE * 5 - sizeMario.y);
+	std::shared_ptr<PlayerCharacter> mario = std::make_shared<PlayerCharacter>(textMario, pos);
 
-	std::shared_ptr<Entity> player = std::make_shared<Entity>();
-	player->m_sprite = mPlayer;
-	player->m_type = EntityType::player;
-	player->m_size = mTexture.getSize();
-	player->m_position = mPlayer.getPosition();
-	EntityManager::m_Entities.push_back(player);
+	EntityManager::m_Entities.push_back(mario);
 
 	// Draw Statistic Font 
 
@@ -125,29 +112,14 @@ void Game::processEvents()
 
 void Game::update(sf::Time elapsedTime)
 {
-	sf::Vector2f movement(0.f, 0.f);
-	if (mIsMovingUp)
-		movement.y -= PlayerSpeed;
-	if (mIsMovingDown)
-		movement.y += PlayerSpeed;
-	if (mIsMovingLeft)
-		movement.x -= PlayerSpeed;
-	if (mIsMovingRight)
-		movement.x += PlayerSpeed;
-
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
 	{
-		if (entity->m_enabled == false)
+		if (entity->GetEnable() == false)
 		{
 			continue;
 		}
 
-		if (entity->m_type != EntityType::player)
-		{
-			continue;
-		}
-
-		entity->m_sprite.move(movement * elapsedTime.asSeconds());
+		entity->Update(elapsedTime);
 	}
 }
 
@@ -157,12 +129,12 @@ void Game::render()
 
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
 	{
-		if (entity->m_enabled == false)
+		if (entity->GetEnable() == false)
 		{
 			continue;
 		}
 
-		mWindow.draw(entity->m_sprite);
+		mWindow.draw(entity->GetSprite());
 	}
 
 	mWindow.draw(mStatisticsText);
@@ -183,21 +155,12 @@ void Game::updateStatistics(sf::Time elapsedTime)
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
 	}
-
-	//
-	// Handle collision
-	//
-
-	if (mStatisticsUpdateTime >= sf::seconds(0.050f))
-	{
-		// Handle collision weapon enemies
-	}
 }
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 {
-	if (key == sf::Keyboard::Up)
-		mIsMovingUp = isPressed;
+	/*if (key == sf::Keyboard::Up)
+		//mIsMovingUp = isPressed;
 	else if (key == sf::Keyboard::Down)
 		mIsMovingDown = isPressed;
 	else if (key == sf::Keyboard::Left)
@@ -207,5 +170,5 @@ void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 
 	if (key == sf::Keyboard::Space)
 	{
-	}
+	}*/
 }

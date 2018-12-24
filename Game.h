@@ -20,6 +20,7 @@ private:
 	void update(sf::Time elapsedTime);
 	void render();
 	void updateStatistics(sf::Time elapsedTime);
+	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
 
 private:
 
