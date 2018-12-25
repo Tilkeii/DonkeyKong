@@ -1,4 +1,5 @@
 #include "pch.h"
+#include <memory>
 #include "EntityManager.h"
 
 std::vector<std::shared_ptr<Entity>> EntityManager::m_Entities;
@@ -21,8 +22,8 @@ std::shared_ptr<PlayerCharacter> EntityManager::GetPlayer()
 			continue;
 		}
 
-		if (PlayerCharacter* p = dynamic_cast<PlayerCharacter*>(entity.get())) {
-			return std::shared_ptr<PlayerCharacter>(p);
+		if (std::shared_ptr<PlayerCharacter> p = std::dynamic_pointer_cast<PlayerCharacter>(entity)) {
+			return p;
 		}
 	}
 

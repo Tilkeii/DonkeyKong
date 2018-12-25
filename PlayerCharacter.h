@@ -6,7 +6,7 @@ class PlayerCharacter : public Entity
 public:
 	PlayerCharacter(sf::Texture text);
 	PlayerCharacter(sf::Texture text, sf::Vector2f pos);
-	~PlayerCharacter();
+	virtual ~PlayerCharacter();
 	
 	virtual void Update(sf::Time elapsedTime);
 	virtual void Render();
@@ -27,9 +27,9 @@ private:
 	sf::Vector2f m_jumpVelocity;
 	sf::Vector2f m_acceleration;
 
-	bool m_isMovingUp;
-	bool m_isMovingDown;
-	bool m_isMovingRight;
-	bool m_isMovingLeft;
+	bool m_isMovingUp = false;
+	bool m_isMovingDown = false;
+	bool m_isMovingRight = false;
+	bool m_isMovingLeft = false;
 };
 

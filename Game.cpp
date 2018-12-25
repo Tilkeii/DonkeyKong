@@ -159,16 +159,20 @@ void Game::updateStatistics(sf::Time elapsedTime)
 
 void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
 {
-	/*if (key == sf::Keyboard::Up)
+	if (key == sf::Keyboard::Up)
 		//mIsMovingUp = isPressed;
+		EntityManager::GetPlayer()->Move(sf::Vector2f(0.f, 150.f));
 	else if (key == sf::Keyboard::Down)
-		mIsMovingDown = isPressed;
+		//mIsMovingDown = isPressed;
+		EntityManager::GetPlayer()->Move(sf::Vector2f(0.f, -150.f));
 	else if (key == sf::Keyboard::Left)
-		mIsMovingLeft = isPressed;
+		//mIsMovingLeft = isPressed;
+		EntityManager::GetPlayer()->Move(sf::Vector2f(-150.f, 0.f));
 	else if (key == sf::Keyboard::Right)
-		mIsMovingRight = isPressed;
+		//mIsMovingRight = isPressed;
+		EntityManager::GetPlayer()->Move(sf::Vector2f(150.f, 150.f));
 
 	if (key == sf::Keyboard::Space)
 	{
-	}*/
+	}
 }
