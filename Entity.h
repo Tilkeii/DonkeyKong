@@ -1,27 +1,29 @@
 #pragma once
 
-enum EntityType
-{
-	player,
-	block,
-	echelle
-};
-
 class Entity
 {
 public:
-	Entity() { };
-	~Entity() { };
+	Entity(sf::Texture text);
+	Entity(sf::Texture text, sf::Vector2f pos);
+	virtual ~Entity();
 
-public:
+	virtual void Update(sf::Time elapsedTime) = 0;
+	virtual void Render() = 0;
+	void HandleCollision();
+
+	void SetPosition(sf::Vector2f position);
+	void SetEnable(bool enable);
+
+	sf::Texture GetTexture();
+	sf::Sprite GetSprite();
+	sf::Vector2f GetPosition();
+	bool GetEnable();
+
+protected:
+	sf::Texture m_texture;
 	sf::Sprite m_sprite;
-	sf::Vector2u m_size;
-	sf::Vector2f m_position;
-	EntityType m_type;
+
 	bool m_enabled = true;
 
-	// Enemy only
-	bool m_bLeftToRight = true;
-	int m_times = 0;
 };
 
