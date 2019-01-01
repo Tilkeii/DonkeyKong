@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PlayerCharacter.h"
+#include "EntityManager.h"
 
 PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text) 
 {
@@ -26,6 +27,21 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 		movement.x += m_playerSpeed * f_deltaTime;
 
 	m_sprite.move(movement);
+
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities) {
+
+		if (std::shared_ptr<PlayerCharacter> p = std::dynamic_pointer_cast<PlayerCharacter>(entity)) {
+			continue;
+		}
+
+		if (entity->GetEnable() == false){
+			continue;
+		}
+
+		if (checkCollision(entity)) {
+			
+		}
+	}
 }
 
 void PlayerCharacter::Render()

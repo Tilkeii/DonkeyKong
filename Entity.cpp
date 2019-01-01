@@ -25,8 +25,17 @@ void Entity::Render()
 {
 }
 
-void Entity::HandleCollision()
+bool Entity::checkCollision(std::shared_ptr<Entity> other)
 {
+	sf::FloatRect otherBoundingBox = other->GetSprite().getGlobalBounds();
+	sf::FloatRect thisBoundingBox = GetSprite().getGlobalBounds();
+
+	if (thisBoundingBox.intersects(otherBoundingBox)) {
+		std::cout << "Collision detected with " << typeid(*other).name() << std::endl;
+		return true;
+	}
+
+	return false;
 }
 
 void Entity::SetPosition(sf::Vector2f position) {  }
@@ -37,6 +46,6 @@ sf::Texture Entity::GetTexture() { return m_texture; }
 
 sf::Sprite Entity::GetSprite() { return m_sprite; }
 
-sf::Vector2f Entity::GetPosition() { return sf::Vector2f(); }
+sf::Vector2f Entity::GetPosition() { return m_sprite.getPosition(); }
 
 bool Entity::GetEnable() { return m_enabled; }

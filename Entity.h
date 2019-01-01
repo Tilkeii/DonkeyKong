@@ -9,7 +9,8 @@ public:
 
 	virtual void Update(sf::Time deltaTime) = 0;
 	virtual void Render() = 0;
-	void HandleCollision();
+
+	bool checkCollision(std::shared_ptr<Entity> other);
 
 	void SetPosition(sf::Vector2f position);
 	void SetEnable(bool enable);
