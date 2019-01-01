@@ -7,7 +7,7 @@ public:
 	Entity(sf::Texture text, sf::Vector2f pos);
 	virtual ~Entity();
 
-	virtual void Update(sf::Time elapsedTime) = 0;
+	virtual void Update(sf::Time deltaTime) = 0;
 	virtual void Render() = 0;
 	void HandleCollision();
 

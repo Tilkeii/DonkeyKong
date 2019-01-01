@@ -95,14 +95,6 @@ void Game::processEvents()
 	{
 		switch (event.type)
 		{
-		case sf::Event::KeyPressed:
-			handlePlayerInput(event.key.code, true);
-			break;
-
-		case sf::Event::KeyReleased:
-			handlePlayerInput(event.key.code, false);
-			break;
-
 		case sf::Event::Closed:
 			mWindow.close();
 			break;
@@ -110,7 +102,7 @@ void Game::processEvents()
 	}
 }
 
-void Game::update(sf::Time elapsedTime)
+void Game::update(sf::Time deltaTime)
 {
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities)
 	{
@@ -119,7 +111,7 @@ void Game::update(sf::Time elapsedTime)
 			continue;
 		}
 
-		entity->Update(elapsedTime);
+		entity->Update(deltaTime);
 	}
 }
 
@@ -141,9 +133,9 @@ void Game::render()
 	mWindow.display();
 }
 
-void Game::updateStatistics(sf::Time elapsedTime)
+void Game::updateStatistics(sf::Time deltaTime)
 {
-	mStatisticsUpdateTime += elapsedTime;
+	mStatisticsUpdateTime += deltaTime;
 	mStatisticsNumFrames += 1;
 
 	if (mStatisticsUpdateTime >= sf::seconds(1.0f))
@@ -154,25 +146,5 @@ void Game::updateStatistics(sf::Time elapsedTime)
 
 		mStatisticsUpdateTime -= sf::seconds(1.0f);
 		mStatisticsNumFrames = 0;
-	}
-}
-
-void Game::handlePlayerInput(sf::Keyboard::Key key, bool isPressed)
-{
-	if (key == sf::Keyboard::Up)
-		//mIsMovingUp = isPressed;
-		EntityManager::GetPlayer()->Move(sf::Vector2f(0.f, 150.f));
-	else if (key == sf::Keyboard::Down)
-		//mIsMovingDown = isPressed;
-		EntityManager::GetPlayer()->Move(sf::Vector2f(0.f, -150.f));
-	else if (key == sf::Keyboard::Left)
-		//mIsMovingLeft = isPressed;
-		EntityManager::GetPlayer()->Move(sf::Vector2f(-150.f, 0.f));
-	else if (key == sf::Keyboard::Right)
-		//mIsMovingRight = isPressed;
-		EntityManager::GetPlayer()->Move(sf::Vector2f(150.f, 150.f));
-
-	if (key == sf::Keyboard::Space)
-	{
 	}
 }

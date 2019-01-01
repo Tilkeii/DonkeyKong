@@ -17,7 +17,7 @@ Entity::~Entity() {
 
 }
 
-void Entity::Update(sf::Time elapsedTime)
+void Entity::Update(sf::Time deltaTime)
 {
 }
 

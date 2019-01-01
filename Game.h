@@ -17,10 +17,9 @@ public:
 
 private:
 	void processEvents();
-	void update(sf::Time elapsedTime);
+	void update(sf::Time deltaTime);
 	void render();
-	void updateStatistics(sf::Time elapsedTime);
-	void handlePlayerInput(sf::Keyboard::Key key, bool isPressed);
+	void updateStatistics(sf::Time deltaTime);
 
 private:
 
