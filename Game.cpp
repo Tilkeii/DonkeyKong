@@ -41,7 +41,7 @@ Game::Game()
 
 	for (int i = 0; i < ECHELLE_COUNT; i++)
 	{
-		sf::Vector2f pos = sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + sizeBlock.y);
+		sf::Vector2f pos = sf::Vector2f(100.f + 70.f * (i + 1), 0.f + BLOCK_SPACE * (i + 1) + (sizeBlock.y - 33.f));
 		std::shared_ptr<Echelle> echelle = std::make_shared<Echelle>(textEchelle, pos);
 
 		EntityManager::m_Entities.push_back(echelle);
