@@ -21,20 +21,22 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 	Entity::Update(deltaTime);
 	float f_deltaTime = deltaTime.asSeconds();
 	float blockYPosition = 0;
-	static bool echelleColision = false;
+	static bool echelleColisionUp = false;
+	static bool echelleColisionDown = false;
 	sf::Vector2f movement(0.0f, 0.0f);
 
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 		movement.x -= m_playerSpeed * f_deltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 		movement.x += m_playerSpeed * f_deltaTime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && echelleColision)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && echelleColisionUp)
 		movement.y -= m_playerSpeed * f_deltaTime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && echelleColision)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && echelleColisionDown)
 		movement.y += m_playerSpeed * f_deltaTime;
 	m_sprite.move(movement);
 
-
+	echelleColisionUp = false;
+	echelleColisionDown = false;
 	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities) {
 
 		if (std::shared_ptr<PlayerCharacter> p = std::dynamic_pointer_cast<PlayerCharacter>(entity)) {
@@ -44,27 +46,28 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 		if (entity->GetEnable() == false){
 			continue;
 		}
-
+		
 		if (checkCollision(entity)) {
-			if (typeid(*entity) == typeid(Block)) {
-				blockYPosition = (*entity).GetPosition().y;
-			}
 			if (typeid(*entity) == typeid(Echelle)){
-				echelleColision = true;
-				if (m_sprite.getPosition().y + this->m_texture.getSize().y <= (*entity).GetPosition().y + m_playerSpeed * f_deltaTime
+				echelleColisionUp = true;
+				echelleColisionDown = true;
+				if (m_sprite.getPosition().y == (*entity).GetPosition().y - this->m_texture.getSize().y + 1) {
+					echelleColisionUp = false;
+					echelleColisionDown = true;
+				}
+				else if (m_sprite.getPosition().y + this->m_texture.getSize().y <= (*entity).GetPosition().y + m_playerSpeed * f_deltaTime
 					&& sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
-					m_sprite.setPosition(m_sprite.getPosition().x, blockYPosition - this->m_texture.getSize().y);
-					echelleColision = false;
+					m_sprite.setPosition(m_sprite.getPosition().x, (*entity).GetPosition().y - this->m_texture.getSize().y + 1);
+					echelleColisionUp = false;
+					echelleColisionDown = false;
 				}
-				if (m_sprite.getPosition().y + this->m_texture.getSize().y >= blockYPosition
-					&& m_sprite.getPosition().y <= blockYPosition
+				if (m_sprite.getPosition().y + this->m_texture.getSize().y >= (*entity).GetPosition().y + (*entity).GetTexture().getSize().y - m_playerSpeed * f_deltaTime
 					&& sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
-					m_sprite.setPosition(m_sprite.getPosition().x, blockYPosition - this->m_texture.getSize().y);
-					echelleColision = false;
+					m_sprite.setPosition(m_sprite.getPosition().x, (*entity).GetPosition().y - this->m_texture.getSize().y + (*entity).GetTexture().getSize().y);
+					echelleColisionUp = false;
+					echelleColisionDown = false;
 				}
-			}
-			else {
-				echelleColision = false;
+
 			}
 		}
 	}
