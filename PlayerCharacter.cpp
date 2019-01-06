@@ -51,8 +51,7 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 			}
 			if (typeid(*entity) == typeid(Echelle)){
 				echelleColision = true;
-				if (m_sprite.getPosition().y <= blockYPosition + m_playerSpeed * f_deltaTime
-					&& m_sprite.getPosition().y >= blockYPosition
+				if (m_sprite.getPosition().y + this->m_texture.getSize().y <= (*entity).GetPosition().y + m_playerSpeed * f_deltaTime
 					&& sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 					m_sprite.setPosition(m_sprite.getPosition().x, blockYPosition - this->m_texture.getSize().y);
 					echelleColision = false;
