@@ -10,6 +10,8 @@ public:
 	
 	virtual void Update(sf::Time elapsedTime);
 	virtual void Render();
+	virtual void collisionDetected(std::shared_ptr<Entity> entity);
+
 	void Jump();
 	void Attack();
 	void GetHurt();
@@ -24,6 +26,9 @@ private:
 
 	bool m_canJump = true;
 	float jumpHeight;
+
+	bool m_echelleCollisionUp = false;
+	bool m_echelleCollisionDown = false;
 
 };
 

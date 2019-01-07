@@ -1,17 +1,18 @@
 #pragma once
 
-class Entity
+class Entity : public std::enable_shared_from_this<Entity>
 {
 public:
 	Entity(sf::Texture text);
 	Entity(sf::Texture text, sf::Vector2f pos);
+	std::shared_ptr<Entity> getEntity() { return shared_from_this(); }
 	virtual ~Entity();
 
 	virtual void Update(sf::Time deltaTime) = 0;
 	virtual void Render() = 0;
+	virtual void collisionDetected(std::shared_ptr<Entity> entity);
 
-	bool checkCollision(std::shared_ptr<Entity> other);
-
+	void checkCollision();
 	void SetPosition(sf::Vector2f position);
 	void SetEnable(bool enable);
 

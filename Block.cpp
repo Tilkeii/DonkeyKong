@@ -22,3 +22,7 @@ void Block::Render()
 {
 	Entity::Render();
 }
+
+void Block::collisionDetected(std::shared_ptr<Entity> entity)
+{
+}

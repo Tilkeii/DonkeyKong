@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Entity.h"
+#include "EntityManager.h"
 
 Entity::Entity(sf::Texture text) {
 	m_texture = text;
@@ -19,24 +20,36 @@ Entity::~Entity() {
 
 void Entity::Update(sf::Time deltaTime)
 {
+	checkCollision();
 }
 
 void Entity::Render()
 {
 }
 
-bool Entity::checkCollision(std::shared_ptr<Entity> other)
+void Entity::checkCollision()
 {
-	sf::FloatRect otherBoundingBox = other->GetSprite().getGlobalBounds();
-	sf::FloatRect thisBoundingBox = GetSprite().getGlobalBounds();
+	for (std::shared_ptr<Entity> entity : EntityManager::m_Entities) {
 
-	if (thisBoundingBox.intersects(otherBoundingBox)) {
-		std::cout << "Collision detected with " << typeid(*other).name() << std::endl;
-		return true;
+		if (entity == getEntity()) {
+			continue;
+		}
+
+		if (entity->GetEnable() == false) {
+			continue;
+		}
+
+		sf::FloatRect otherBoundingBox = entity->GetSprite().getGlobalBounds();
+		sf::FloatRect thisBoundingBox = GetSprite().getGlobalBounds();
+
+		if (thisBoundingBox.intersects(otherBoundingBox)) {
+			entity->collisionDetected(getEntity());
+			this->collisionDetected(entity);
+		}
 	}
-
-	return false;
 }
+
+void Entity::collisionDetected(std::shared_ptr<Entity> entity) {  }
 
 void Entity::SetPosition(sf::Vector2f position) {  }
 

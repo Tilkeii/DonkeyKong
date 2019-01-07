@@ -23,3 +23,7 @@ void Tonneau::Render()
 {
 	Entity::Render();
 }
+
+void Tonneau::collisionDetected(std::shared_ptr<Entity> entity)
+{
+}

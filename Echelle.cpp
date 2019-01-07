@@ -23,3 +23,7 @@ void Echelle::Render()
 {
 	Entity::Render();
 }
+
+void Echelle::collisionDetected(std::shared_ptr<Entity> entity)
+{
+}

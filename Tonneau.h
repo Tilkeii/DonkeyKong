@@ -10,6 +10,7 @@ public:
 
 	virtual void Update(sf::Time elapsedTime);
 	virtual void Render();
+	virtual void collisionDetected(std::shared_ptr<Entity> entity);
 
 };
 
