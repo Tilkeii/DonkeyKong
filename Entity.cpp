@@ -12,6 +12,9 @@ Entity::Entity(sf::Texture text, sf::Vector2f pos) {
 	m_texture = text;
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(pos);
+
+	m_rect.setSize(sf::Vector2f(m_texture.getSize().x, m_texture.getSize().y));
+	m_rect.setFillColor(sf::Color(40 + rand() % 185, 40 + rand() % 185, 40 + rand() % 185, 75));
 }
 
 Entity::~Entity() {
@@ -20,11 +23,14 @@ Entity::~Entity() {
 
 void Entity::Update(sf::Time deltaTime)
 {
+	m_rect.setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y));
 	checkCollision();
 }
 
-void Entity::Render()
+void Entity::Render(sf::RenderWindow *window)
 {
+	window->draw(m_sprite);
+	window->draw(m_rect);
 }
 
 void Entity::checkCollision()

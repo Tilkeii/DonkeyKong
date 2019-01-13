@@ -18,9 +18,9 @@ void Block::Update(sf::Time elapsedTime)
 	Entity::Update(elapsedTime);
 }
 
-void Block::Render()
+void Block::Render(sf::RenderWindow *window)
 {
-	Entity::Render();
+	Entity::Render(window);
 }
 
 void Block::collisionDetected(std::shared_ptr<Entity> entity)

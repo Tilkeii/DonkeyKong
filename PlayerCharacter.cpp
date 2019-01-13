@@ -36,9 +36,9 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 
 }
 
-void PlayerCharacter::Render()
+void PlayerCharacter::Render(sf::RenderWindow *window)
 {
-	Entity::Render();
+	Entity::Render(window);
 }
 
 void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)

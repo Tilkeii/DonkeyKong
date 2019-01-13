@@ -126,7 +126,7 @@ void Game::render()
 			continue;
 		}
 
-		mWindow.draw(entity->GetSprite());
+		entity->Render(&mWindow);
 	}
 
 	mWindow.draw(mStatisticsText);

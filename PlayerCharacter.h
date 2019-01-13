@@ -9,7 +9,7 @@ public:
 	virtual ~PlayerCharacter();
 	
 	virtual void Update(sf::Time elapsedTime);
-	virtual void Render();
+	virtual void Render(sf::RenderWindow *window);
 	virtual void collisionDetected(std::shared_ptr<Entity> entity);
 
 	void Jump();

@@ -9,7 +9,7 @@ public:
 	virtual ~Entity();
 
 	virtual void Update(sf::Time deltaTime) = 0;
-	virtual void Render() = 0;
+	virtual void Render(sf::RenderWindow *mWindow) = 0;
 	virtual void collisionDetected(std::shared_ptr<Entity> entity);
 
 	void checkCollision();
@@ -24,6 +24,8 @@ public:
 protected:
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
+
+	sf::RectangleShape m_rect;
 
 	bool m_enabled = true;
 

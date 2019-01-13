@@ -19,9 +19,9 @@ void Echelle::Update(sf::Time elapsedTime)
 	Entity::Update(elapsedTime);
 }
 
-void Echelle::Render()
+void Echelle::Render(sf::RenderWindow *window)
 {
-	Entity::Render();
+	Entity::Render(window);
 }
 
 void Echelle::collisionDetected(std::shared_ptr<Entity> entity)

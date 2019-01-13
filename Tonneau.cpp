@@ -19,9 +19,9 @@ void Tonneau::Update(sf::Time elapsedTime)
 	Entity::Update(elapsedTime);
 }
 
-void Tonneau::Render()
+void Tonneau::Render(sf::RenderWindow *window)
 {
-	Entity::Render();
+	Entity::Render(window);
 }
 
 void Tonneau::collisionDetected(std::shared_ptr<Entity> entity)
