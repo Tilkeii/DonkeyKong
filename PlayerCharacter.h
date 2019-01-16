@@ -23,9 +23,11 @@ private:
 
 	int m_lives;
 	float m_playerSpeed = 250.0f;
-
+	sf::Vector2f m_velocity;
 	bool m_canJump = true;
-	float jumpHeight;
+	float m_jumpHeight = -25.0f;
+	bool m_jumpFall = false;
+	sf::Vector2f m_savePosWhenJump;
 
 	bool m_echelleCollisionUp = false;
 	bool m_echelleCollisionDown = false;
