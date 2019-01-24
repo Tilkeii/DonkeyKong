@@ -31,6 +31,8 @@ private:
 
 	bool m_echelleCollisionUp = false;
 	bool m_echelleCollisionDown = false;
+	bool m_canRight = true;
+	bool m_canLeft = true;
 
 };
 
