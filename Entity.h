@@ -10,11 +10,12 @@ public:
 
 	virtual void Update(sf::Time deltaTime) = 0;
 	virtual void Render(sf::RenderWindow *mWindow) = 0;
-	virtual void collisionDetected(std::shared_ptr<Entity> entity);
+	virtual void collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection);
 
 	void checkCollision();
 	void SetPosition(sf::Vector2f position);
 	void SetEnable(bool enable);
+	void updateHitbox();
 
 	sf::Texture GetTexture();
 	sf::Sprite GetSprite();
@@ -24,6 +25,7 @@ public:
 protected:
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
+	sf::FloatRect m_hitbox;
 
 	sf::RectangleShape m_rect;
 

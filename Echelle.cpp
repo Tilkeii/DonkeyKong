@@ -24,6 +24,6 @@ void Echelle::Render(sf::RenderWindow *window)
 	Entity::Render(window);
 }
 
-void Echelle::collisionDetected(std::shared_ptr<Entity> entity)
+void Echelle::collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection)
 {
 }

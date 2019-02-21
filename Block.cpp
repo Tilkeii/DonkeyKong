@@ -23,6 +23,6 @@ void Block::Render(sf::RenderWindow *window)
 	Entity::Render(window);
 }
 
-void Block::collisionDetected(std::shared_ptr<Entity> entity)
+void Block::collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection)
 {
 }

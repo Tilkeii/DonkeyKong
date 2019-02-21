@@ -11,6 +11,7 @@ PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text)
 
 PlayerCharacter::PlayerCharacter(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
 {
+	m_rect.setFillColor(sf::Color(255, 0, 0, 75));
 }
 
 PlayerCharacter::~PlayerCharacter()
@@ -35,9 +36,9 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 		m_velocity.y += m_playerSpeed * f_deltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_canJump)
 		Jump();
-
+	m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
 	if (!m_canJump) { // si il est dans les airs
-		m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
+		//m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
 		if (m_sprite.getPosition().y - m_savePosWhenJump.y > m_jumpHeight && !m_jumpFall) {
 			std::cout << "diff " << m_sprite.getPosition().y - m_savePosWhenJump.y << std::endl;
 			m_velocity -= sf::Vector2f(0.0f, 400.0f * f_deltaTime); // appliquer une force vers le haut (pour le saut)
@@ -54,11 +55,12 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 void PlayerCharacter::Render(sf::RenderWindow *window)
 {
 	Entity::Render(window);
+	window->draw(m_rect);
 }
 
-void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
+void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection)
 {
-	//std::cout << "Collision detected with " << typeid(*entity).name() << std::endl;
+	std::cout << "Collision detected with " << typeid(*entity).name() << std::endl;
 	m_echelleCollisionUp = false;
 	m_echelleCollisionDown = false;
 
@@ -85,6 +87,34 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
 
 	if (std::shared_ptr<Block> block = std::dynamic_pointer_cast<Block>(entity)) {
 		m_canJump = true;
+		sf::FloatRect spriteFloatRect = m_sprite.getGlobalBounds();
+		sf::FloatRect blockFloatRect = block->GetSprite().getGlobalBounds();
+
+		float xDiff = (spriteFloatRect.left + (spriteFloatRect.width / 2)) -
+			(blockFloatRect.left + (blockFloatRect.width / 2));
+		float yDiff = (spriteFloatRect.top + (spriteFloatRect.height / 2)) -
+			(blockFloatRect.top + (blockFloatRect.height / 2));
+
+		float resolve = 0;
+
+		if (abs(xDiff) > abs(yDiff)) {
+			if (xDiff > 0) {
+				resolve = (blockFloatRect.left + blockFloatRect.height) - spriteFloatRect.left;
+			}
+			else {
+				resolve = -((spriteFloatRect.left + spriteFloatRect.width) - blockFloatRect.left);
+			}
+			m_sprite.move(resolve, 0);
+		}
+		else {
+			if (yDiff > 0) {
+				resolve = (blockFloatRect.top + blockFloatRect.height) - spriteFloatRect.top;
+			}
+			else {
+				resolve = -((spriteFloatRect.top + spriteFloatRect.height) - blockFloatRect.top);
+			}
+			m_sprite.move(0, resolve);
+		}
 	}
 }
 

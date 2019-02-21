@@ -13,8 +13,8 @@ Entity::Entity(sf::Texture text, sf::Vector2f pos) {
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(pos);
 
-	m_rect.setSize(sf::Vector2f(m_texture.getSize().x, m_texture.getSize().y));
-	m_rect.setFillColor(sf::Color(40 + rand() % 185, 40 + rand() % 185, 40 + rand() % 185, 75));
+	m_hitbox = sf::FloatRect(GetPosition().y, GetPosition().y, m_texture.getSize().x, m_texture.getSize().y); // init rectangle hitbox
+	m_rect.setSize(sf::Vector2f(m_hitbox.width, m_hitbox.height));
 }
 
 Entity::~Entity() {
@@ -23,14 +23,13 @@ Entity::~Entity() {
 
 void Entity::Update(sf::Time deltaTime)
 {
-	m_rect.setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y));
+	updateHitbox();
 	checkCollision();
 }
 
 void Entity::Render(sf::RenderWindow *window)
 {
 	window->draw(m_sprite);
-	window->draw(m_rect);
 }
 
 void Entity::checkCollision()
@@ -47,19 +46,24 @@ void Entity::checkCollision()
 
 		sf::FloatRect otherBoundingBox = entity->GetSprite().getGlobalBounds();
 		sf::FloatRect thisBoundingBox = GetSprite().getGlobalBounds();
-
-		if (thisBoundingBox.intersects(otherBoundingBox)) {
-			entity->collisionDetected(getEntity());
-			this->collisionDetected(entity);
+		sf::FloatRect intersection;
+		if (thisBoundingBox.intersects(otherBoundingBox, intersection)) {
+			entity->collisionDetected(getEntity(), intersection);
+			this->collisionDetected(entity, intersection);
 		}
 	}
 }
 
-void Entity::collisionDetected(std::shared_ptr<Entity> entity) {  }
+void Entity::collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection) {  }
 
 void Entity::SetPosition(sf::Vector2f position) {  }
 
 void Entity::SetEnable(bool enable) { m_enabled = enable; }
+
+void Entity::updateHitbox()
+{
+	m_rect.setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y));
+}
 
 sf::Texture Entity::GetTexture() { return m_texture; }
 
