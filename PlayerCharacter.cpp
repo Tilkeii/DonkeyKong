@@ -11,7 +11,7 @@ PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text)
 
 PlayerCharacter::PlayerCharacter(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
 {
-	m_rect.setFillColor(sf::Color(255, 0, 0, 75));
+	ShowHitbox(sf::Color(255, 0, 0, 75));
 }
 
 PlayerCharacter::~PlayerCharacter()
@@ -55,7 +55,6 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 void PlayerCharacter::Render(sf::RenderWindow *window)
 {
 	Entity::Render(window);
-	window->draw(m_rect);
 }
 
 void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection)

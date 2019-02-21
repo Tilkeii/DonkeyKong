@@ -30,6 +30,8 @@ void Entity::Update(sf::Time deltaTime)
 void Entity::Render(sf::RenderWindow *window)
 {
 	window->draw(m_sprite);
+	if (m_showHitbox)
+		window->draw(m_rect);
 }
 
 void Entity::checkCollision()
@@ -72,3 +74,14 @@ sf::Sprite Entity::GetSprite() { return m_sprite; }
 sf::Vector2f Entity::GetPosition() { return m_sprite.getPosition(); }
 
 bool Entity::GetEnable() { return m_enabled; }
+
+bool Entity::ShowHitbox(sf::Color color)
+{
+	m_rect.setFillColor(color);
+	return m_showHitbox = true;
+}
+
+bool Entity::HideHitbox()
+{
+	return m_showHitbox = false;
+}

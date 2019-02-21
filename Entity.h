@@ -21,6 +21,8 @@ public:
 	sf::Sprite GetSprite();
 	sf::Vector2f GetPosition();
 	bool GetEnable();
+	bool ShowHitbox(sf::Color color);
+	bool HideHitbox();
 
 protected:
 	sf::Texture m_texture;
@@ -30,6 +32,7 @@ protected:
 	sf::RectangleShape m_rect;
 
 	bool m_enabled = true;
+	bool m_showHitbox = false;
 
 };
 
