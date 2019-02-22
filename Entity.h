@@ -23,6 +23,7 @@ public:
 	bool GetEnable();
 	bool ShowHitbox(sf::Color color);
 	bool HideHitbox();
+	sf::FloatRect GetHitbox();
 
 protected:
 	sf::Texture m_texture;

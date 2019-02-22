@@ -86,34 +86,47 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity, sf::Floa
 
 	if (std::shared_ptr<Block> block = std::dynamic_pointer_cast<Block>(entity)) {
 		m_canJump = true;
-		sf::FloatRect spriteFloatRect = m_sprite.getGlobalBounds();
-		sf::FloatRect blockFloatRect = block->GetSprite().getGlobalBounds();
+		sf::FloatRect hitboxPlayer = GetHitbox();
+		sf::FloatRect hitboxBlock = block->GetHitbox();
 
-		float xDiff = (spriteFloatRect.left + (spriteFloatRect.width / 2)) -
-			(blockFloatRect.left + (blockFloatRect.width / 2));
-		float yDiff = (spriteFloatRect.top + (spriteFloatRect.height / 2)) -
-			(blockFloatRect.top + (blockFloatRect.height / 2));
+		/*std::cout << 
+			"Sprite Height : " << hitboxPlayer.height << 
+			" Width : " << hitboxPlayer.width <<
+			" Left : " << hitboxPlayer.left <<
+			" Top : " << hitboxPlayer.top << std::endl;
+
+		std::cout <<
+			"Hitbox Height : " << hitboxPlayer.height <<
+			" Width : " << hitboxPlayer.width <<
+			" Left : " << hitboxPlayer.left <<
+			" Top : " << hitboxPlayer.top << std::endl;*/
+
+		float xDiff = (hitboxPlayer.left + (hitboxPlayer.width / 2)) -
+			(hitboxBlock.left + (hitboxBlock.width / 2));
+		float yDiff = (hitboxPlayer.top + (hitboxPlayer.height / 2)) -
+			(hitboxBlock.top + (hitboxBlock.height / 2));
 
 		float resolve = 0;
 
 		if (abs(xDiff) > abs(yDiff)) {
 			if (xDiff > 0) {
-				resolve = (blockFloatRect.left + blockFloatRect.height) - spriteFloatRect.left;
+				resolve = (hitboxBlock.left + hitboxBlock.height) - hitboxPlayer.left;
 			}
 			else {
-				resolve = -((spriteFloatRect.left + spriteFloatRect.width) - blockFloatRect.left);
+				resolve = -((hitboxPlayer.left + hitboxPlayer.width) - hitboxBlock.left);
 			}
 			m_sprite.move(resolve, 0);
 		}
 		else {
 			if (yDiff > 0) {
-				resolve = (blockFloatRect.top + blockFloatRect.height) - spriteFloatRect.top;
+				resolve = (hitboxBlock.top + hitboxBlock.height) - hitboxPlayer.top;
 			}
 			else {
-				resolve = -((spriteFloatRect.top + spriteFloatRect.height) - blockFloatRect.top);
+				resolve = -((hitboxPlayer.top + hitboxPlayer.height) - hitboxBlock.top);
 			}
 			m_sprite.move(0, resolve);
 		}
+
 	}
 }
 
