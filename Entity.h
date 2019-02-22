@@ -34,6 +34,7 @@ protected:
 
 	bool m_enabled = true;
 	bool m_showHitbox = false;
+	bool m_isOnFloor = false;
 
 };
 

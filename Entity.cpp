@@ -13,7 +13,7 @@ Entity::Entity(sf::Texture text, sf::Vector2f pos) {
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(pos);
 
-	m_hitbox = sf::FloatRect(GetPosition().x - (m_texture.getSize().x / 2), GetPosition().y - m_texture.getSize().y, m_texture.getSize().x, m_texture.getSize().y); // init rectangle hitbox
+	m_hitbox = sf::FloatRect(m_sprite.getGlobalBounds().left, m_sprite.getGlobalBounds().top, m_texture.getSize().x, m_texture.getSize().y); // init rectangle hitbox
 	m_rect.setSize(sf::Vector2f(m_hitbox.width, m_hitbox.height));
 }
 
@@ -48,6 +48,8 @@ void Entity::checkCollision()
 
 		sf::FloatRect otherBoundingBox = entity->GetHitbox();
 		sf::FloatRect thisBoundingBox = GetHitbox();
+		//sf::FloatRect otherBoundingBox = entity->GetSprite().getGlobalBounds();
+		//sf::FloatRect thisBoundingBox = GetSprite().getGlobalBounds();
 		sf::FloatRect intersection;
 		if (thisBoundingBox.intersects(otherBoundingBox, intersection)) {
 			entity->collisionDetected(getEntity(), intersection);
@@ -64,7 +66,7 @@ void Entity::SetEnable(bool enable) { m_enabled = enable; }
 
 void Entity::updateHitbox()
 {
-	m_hitbox = sf::FloatRect(GetPosition().x - (m_texture.getSize().x / 2), GetPosition().y - m_texture.getSize().y, m_texture.getSize().x, m_texture.getSize().y); // init rectangle hitbox
+	m_hitbox = sf::FloatRect(m_sprite.getGlobalBounds().left, m_sprite.getGlobalBounds().top, m_texture.getSize().x, m_texture.getSize().y); // init rectangle hitbox
 	m_rect.setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y));
 }
 

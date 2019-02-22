@@ -36,7 +36,8 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 		m_velocity.y += m_playerSpeed * f_deltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_canJump)
 		Jump();
-	m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
+	if(!m_isOnFloor)
+		m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
 	if (!m_canJump) { // si il est dans les airs
 		//m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
 		if (m_sprite.getPosition().y - m_savePosWhenJump.y > m_jumpHeight && !m_jumpFall) {
@@ -47,6 +48,8 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 			m_jumpFall = true;
 		}
 	}
+
+	m_isOnFloor = false;
 
 	m_sprite.move(m_velocity);
 
@@ -101,32 +104,7 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity, sf::Floa
 			" Left : " << hitboxPlayer.left <<
 			" Top : " << hitboxPlayer.top << std::endl;*/
 
-		float xDiff = (hitboxPlayer.left + (hitboxPlayer.width / 2)) -
-			(hitboxBlock.left + (hitboxBlock.width / 2));
-		float yDiff = (hitboxPlayer.top + (hitboxPlayer.height / 2)) -
-			(hitboxBlock.top + (hitboxBlock.height / 2));
-
-		float resolve = 0;
-
-		if (abs(xDiff) > abs(yDiff)) {
-			if (xDiff > 0) {
-				resolve = (hitboxBlock.left + hitboxBlock.height) - hitboxPlayer.left;
-			}
-			else {
-				resolve = -((hitboxPlayer.left + hitboxPlayer.width) - hitboxBlock.left);
-			}
-			m_sprite.move(resolve, 0);
-		}
-		else {
-			if (yDiff > 0) {
-				resolve = (hitboxBlock.top + hitboxBlock.height) - hitboxPlayer.top;
-			}
-			else {
-				resolve = -((hitboxPlayer.top + hitboxPlayer.height) - hitboxBlock.top);
-			}
-			m_sprite.move(0, resolve);
-		}
-
+		m_isOnFloor = true;
 	}
 }
 
