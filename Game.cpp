@@ -6,11 +6,10 @@
 #include "PlayerCharacter.h"
 #include "EntityManager.h"
 
-const sf::Vector2f GRAVITY = sf::Vector2f(0.f, 9.81f);
 const sf::Time Game::TimePerFrame = sf::seconds(1.f / 60.f);
 
 Game::Game()
-	: mWindow(sf::VideoMode(840, 600), "Donkey Kong 1981", sf::Style::Close)
+	: mWindow(sf::VideoMode(1260, 900), "Donkey Kong 1981", sf::Style::Close)
 	, mFont()
 	, mStatisticsText()
 	, mStatisticsUpdateTime()

@@ -25,7 +25,7 @@ private:
 	float m_playerSpeed = 250.0f;
 	sf::Vector2f m_velocity;
 	bool m_canJump = true;
-	float m_jumpHeight = -25.0f;
+	float m_jumpHeight = -60.0f;
 	bool m_jumpFall = false;
 	sf::Vector2f m_savePosWhenJump;
 
