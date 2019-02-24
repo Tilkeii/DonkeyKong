@@ -4,8 +4,8 @@
 
 Entity::Entity(sf::Texture text) {
 	m_texture = text;
-	m_sprite.setTexture(m_texture);
-	m_sprite.setPosition(sf::Vector2f(0.f, 0.f));
+	//m_sprite.setTexture(m_texture);
+	//m_sprite.setPosition(sf::Vector2f(0.f, 0.f));
 }
 
 Entity::Entity(sf::Texture text, sf::Vector2f pos) {

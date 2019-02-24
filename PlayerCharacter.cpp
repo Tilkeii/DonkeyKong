@@ -7,6 +7,12 @@
 
 PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text) 
 {
+	sf::IntRect rectSourceSprite(155, 3, 15, 16);
+	m_sprite = sf::Sprite(m_texture, rectSourceSprite);
+
+	ShowHitbox(sf::Color(255, 0, 0, 75));
+	m_sprite.setScale(3.f, 3.f);
+	SetHitbox(0.f, 0.f, (-(float)m_texture.getSize().x + 15.f) * 3, (-(float)m_texture.getSize().y + 16.f) * 3);
 }
 
 PlayerCharacter::PlayerCharacter(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
@@ -25,13 +31,31 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 	Entity::Update(deltaTime);
 	float f_deltaTime = deltaTime.asSeconds();
 	float blockYPosition = 0;
+	sf::IntRect rectSourceSprite = m_sprite.getTextureRect();
 	//sf::Vector2f movement(0.0f, 0.0f);
 	m_velocity = sf::Vector2f(0.0f, 0.0f);
 
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && m_canLeft)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left) && m_canLeft){
+		rectSourceSprite.left = 136;
 		m_velocity.x -= m_playerSpeed * f_deltaTime;
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && m_canRight)
+		rectSourceSprite = m_sprite.getTextureRect();
+		if (rectSourceSprite.left < 95)
+			rectSourceSprite.left = 136;
+		else
+			rectSourceSprite.left -= 21;
+		m_sprite.setTextureRect(rectSourceSprite);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right) && m_canRight) {
+
+		rectSourceSprite.left = 155;
 		m_velocity.x += m_playerSpeed * f_deltaTime;
+		rectSourceSprite = m_sprite.getTextureRect();
+		if (rectSourceSprite.left >= 197)
+			rectSourceSprite.left = 155;
+		else
+			rectSourceSprite.left += 21;
+		m_sprite.setTextureRect(rectSourceSprite);
+	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up) && m_echelleCollisionUp)
 		m_velocity.y -= m_playerSpeed * f_deltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down) && m_echelleCollisionDown)
