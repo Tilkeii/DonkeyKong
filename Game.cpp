@@ -54,12 +54,14 @@ Game::Game()
 
 	// Draw Mario
 
-	sf::Texture textMario;
-	textMario.loadFromFile("Media/Textures/Mario_small_transparent.png"); // Mario_small.png");
-	sf::Vector2u sizeMario = textMario.getSize();
+	sf::IntRect marioInit(155, 3, 15, 16);
+	static sf::Texture textMario;
+	textMario.loadFromFile("Media/Textures/spriteSheet.gif");
 
-	sf::Vector2f pos = sf::Vector2f(100.f + 70.f, BLOCK_SPACE * 5 - sizeMario.y);
-	std::shared_ptr<PlayerCharacter> mario = std::make_shared<PlayerCharacter>(textMario, pos);
+	//sf::Vector2u sizeMario = textMario.getSize();
+
+	//sf::Vector2f pos = sf::Vector2f(100.f + 70.f, BLOCK_SPACE * 5 - sizeMario.y * 3);
+	std::shared_ptr<PlayerCharacter> mario = std::make_shared<PlayerCharacter>(textMario);
 
 	EntityManager::m_Entities.push_back(mario);
 
