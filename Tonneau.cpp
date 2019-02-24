@@ -24,6 +24,6 @@ void Tonneau::Render(sf::RenderWindow *window)
 	Entity::Render(window);
 }
 
-void Tonneau::collisionDetected(std::shared_ptr<Entity> entity)
+void Tonneau::collisionDetected(std::shared_ptr<Entity> entit, sf::FloatRect intersectiony)
 {
 }

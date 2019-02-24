@@ -13,8 +13,8 @@ Entity::Entity(sf::Texture text, sf::Vector2f pos) {
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(pos);
 
-	m_rect.setSize(sf::Vector2f(m_texture.getSize().x, m_texture.getSize().y));
-	m_rect.setFillColor(sf::Color(40 + rand() % 185, 40 + rand() % 185, 40 + rand() % 185, 75));
+	m_hitbox = sf::FloatRect(m_sprite.getGlobalBounds().left, m_sprite.getGlobalBounds().top, m_texture.getSize().x, m_texture.getSize().y); // init rectangle hitbox
+	m_rect.setSize(sf::Vector2f(m_hitbox.width, m_hitbox.height));
 }
 
 Entity::~Entity() {
@@ -23,14 +23,15 @@ Entity::~Entity() {
 
 void Entity::Update(sf::Time deltaTime)
 {
-	m_rect.setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y));
+	updateHitbox();
 	checkCollision();
 }
 
 void Entity::Render(sf::RenderWindow *window)
 {
 	window->draw(m_sprite);
-	window->draw(m_rect);
+	if (m_showHitbox)
+		window->draw(m_rect);
 }
 
 void Entity::checkCollision()
@@ -45,21 +46,29 @@ void Entity::checkCollision()
 			continue;
 		}
 
-		sf::FloatRect otherBoundingBox = entity->GetSprite().getGlobalBounds();
-		sf::FloatRect thisBoundingBox = GetSprite().getGlobalBounds();
-
-		if (thisBoundingBox.intersects(otherBoundingBox)) {
-			entity->collisionDetected(getEntity());
-			this->collisionDetected(entity);
+		sf::FloatRect otherBoundingBox = entity->GetHitbox();
+		sf::FloatRect thisBoundingBox = GetHitbox();
+		//sf::FloatRect otherBoundingBox = entity->GetSprite().getGlobalBounds();
+		//sf::FloatRect thisBoundingBox = GetSprite().getGlobalBounds();
+		sf::FloatRect intersection;
+		if (thisBoundingBox.intersects(otherBoundingBox, intersection)) {
+			entity->collisionDetected(getEntity(), intersection);
+			this->collisionDetected(entity, intersection);
 		}
 	}
 }
 
-void Entity::collisionDetected(std::shared_ptr<Entity> entity) {  }
+void Entity::collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection) {  }
 
 void Entity::SetPosition(sf::Vector2f position) {  }
 
 void Entity::SetEnable(bool enable) { m_enabled = enable; }
+
+void Entity::updateHitbox()
+{
+	m_hitbox = sf::FloatRect(m_sprite.getGlobalBounds().left, m_sprite.getGlobalBounds().top, m_texture.getSize().x, m_texture.getSize().y); // init rectangle hitbox
+	m_rect.setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y));
+}
 
 sf::Texture Entity::GetTexture() { return m_texture; }
 
@@ -68,3 +77,19 @@ sf::Sprite Entity::GetSprite() { return m_sprite; }
 sf::Vector2f Entity::GetPosition() { return m_sprite.getPosition(); }
 
 bool Entity::GetEnable() { return m_enabled; }
+
+bool Entity::ShowHitbox(sf::Color color)
+{
+	m_rect.setFillColor(color);
+	return m_showHitbox = true;
+}
+
+bool Entity::HideHitbox()
+{
+	return m_showHitbox = false;
+}
+
+sf::FloatRect Entity::GetHitbox()
+{
+	return m_hitbox;
+}

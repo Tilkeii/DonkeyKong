@@ -11,6 +11,7 @@ PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text)
 
 PlayerCharacter::PlayerCharacter(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
 {
+	ShowHitbox(sf::Color(255, 0, 0, 75));
 }
 
 PlayerCharacter::~PlayerCharacter()
@@ -35,10 +36,10 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 		m_velocity.y += m_playerSpeed * f_deltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_canJump)
 		Jump();
-
-
+	if(!m_isOnFloor)
+		m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravitï¿½
 	if (!m_canJump) { // si il est dans les airs
-		m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
+		//m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravitï¿½
 		if (m_sprite.getPosition().y - m_savePosWhenJump.y > m_jumpHeight && !m_jumpFall) {
 			std::cout << "diff " << m_sprite.getPosition().y - m_savePosWhenJump.y << std::endl;
 			m_velocity -= sf::Vector2f(0.0f, 400.0f * f_deltaTime); // appliquer une force vers le haut (pour le saut)
@@ -47,6 +48,8 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 			m_jumpFall = true;
 		}
 	}
+
+	m_isOnFloor = false;
 
 	m_sprite.move(m_velocity);
 
@@ -57,8 +60,9 @@ void PlayerCharacter::Render(sf::RenderWindow *window)
 	Entity::Render(window);
 }
 
-void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
+void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection)
 {
+	std::cout << "Collision detected with " << typeid(*entity).name() << std::endl;
 	m_echelleCollisionUp = false;
 	m_echelleCollisionDown = false;
 	m_canRight = true;
@@ -75,7 +79,7 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
 			m_echelleCollisionDown = true;
 		}
 
-		//vérif que le milieu de Mario est dans l'échelle
+		//vï¿½rif que le milieu de Mario est dans l'ï¿½chelle
 		if (m_sprite.getPosition().x + this->m_texture.getSize().x / 2 <= echelle->GetPosition().x + echelle->GetTexture().getSize().x
 				&& m_sprite.getPosition().x + this->m_texture.getSize().x / 2 >= echelle->GetPosition().x) {
 			m_echelleCollisionUp = true;
@@ -86,19 +90,19 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
 			m_echelleCollisionDown = false;
 		}
 
-		//peut gauche droite quand en haut de l'échelle
+		//peut gauche droite quand en haut de l'ï¿½chelle
 		if (m_sprite.getPosition().y + this->m_texture.getSize().y <= echelle->GetPosition().y + m_playerSpeed * Game::TimePerFrame.asSeconds()) {
 			m_canRight = true;
 			m_canLeft = true;
 		}
 
-		//peut gauche droite quand en bas de l'échelle
+		//peut gauche droite quand en bas de l'ï¿½chelle
 		if (m_sprite.getPosition().y + this->m_texture.getSize().y >= echelle->GetPosition().y + echelle->GetTexture().getSize().y - m_playerSpeed * Game::TimePerFrame.asSeconds()) {
 			m_canRight = true;
 			m_canLeft = true;
 		}
 
-		//Nous aligne bien en haut de l'échelle
+		//Nous aligne bien en haut de l'ï¿½chelle
 		if (m_sprite.getPosition().y + this->m_texture.getSize().y <= echelle->GetPosition().y + m_playerSpeed * Game::TimePerFrame.asSeconds()
 			&& sf::Keyboard::isKeyPressed(sf::Keyboard::Up)) {
 			m_sprite.setPosition(m_sprite.getPosition().x, echelle->GetPosition().y - this->m_texture.getSize().y + 1);
@@ -108,7 +112,7 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
 			m_canLeft = true;
 		}
 		
-		//Nous aligne bien en bas de l'échelle
+		//Nous aligne bien en bas de l'ï¿½chelle
 		if (m_sprite.getPosition().y + this->m_texture.getSize().y >= echelle->GetPosition().y + echelle->GetTexture().getSize().y - m_playerSpeed * Game::TimePerFrame.asSeconds()
 			&& sf::Keyboard::isKeyPressed(sf::Keyboard::Down)) {
 			m_sprite.setPosition(m_sprite.getPosition().x, echelle->GetPosition().y - this->m_texture.getSize().y + echelle->GetTexture().getSize().y);
@@ -121,6 +125,22 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
 
 	if (std::shared_ptr<Block> block = std::dynamic_pointer_cast<Block>(entity)) {
 		m_canJump = true;
+		sf::FloatRect hitboxPlayer = GetHitbox();
+		sf::FloatRect hitboxBlock = block->GetHitbox();
+
+		/*std::cout << 
+			"Sprite Height : " << hitboxPlayer.height << 
+			" Width : " << hitboxPlayer.width <<
+			" Left : " << hitboxPlayer.left <<
+			" Top : " << hitboxPlayer.top << std::endl;
+
+		std::cout <<
+			"Hitbox Height : " << hitboxPlayer.height <<
+			" Width : " << hitboxPlayer.width <<
+			" Left : " << hitboxPlayer.left <<
+			" Top : " << hitboxPlayer.top << std::endl;*/
+
+		m_isOnFloor = true;
 	}
 	std::cout << "on touche  " << typeid(*entity).name() << std::endl;
 	std::cout << "resultat up " << m_echelleCollisionUp << std::endl;

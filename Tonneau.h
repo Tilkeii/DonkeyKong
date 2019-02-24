@@ -10,7 +10,7 @@ public:
 
 	virtual void Update(sf::Time elapsedTime);
 	virtual void Render(sf::RenderWindow *window);
-	virtual void collisionDetected(std::shared_ptr<Entity> entity);
+	virtual void collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection);
 
 };
 
