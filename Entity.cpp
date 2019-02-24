@@ -13,9 +13,13 @@ Entity::Entity(sf::Texture text, sf::Vector2f pos) {
 	m_sprite.setTexture(m_texture);
 	m_sprite.setPosition(pos);
 
-	m_hitbox = sf::FloatRect(m_sprite.getPosition().x, m_sprite.getPosition().y, m_texture.getSize().x * m_sprite.getScale().x, m_texture.getSize().y * m_sprite.getScale().y); // init rectangle hitbox
+	m_hitbox = sf::FloatRect(
+		m_sprite.getPosition().x - m_hitboxLeft,
+		m_sprite.getPosition().y - m_hitboxTop,
+		m_texture.getSize().x * m_sprite.getScale().x + m_hitboxWidth,
+		m_texture.getSize().y * m_sprite.getScale().y + m_hitboxHeight);
+
 	m_rect.setSize(sf::Vector2f(m_hitbox.width, m_hitbox.height));
-	m_rect.setScale(m_sprite.getScale());
 }
 
 Entity::~Entity() {
@@ -67,9 +71,12 @@ void Entity::SetEnable(bool enable) { m_enabled = enable; }
 
 void Entity::updateHitbox()
 {
-	m_hitbox = sf::FloatRect(m_sprite.getPosition().x, m_sprite.getPosition().y, m_texture.getSize().x * m_sprite.getScale().x, m_texture.getSize().y * m_sprite.getScale().y); // init rectangle hitbox
-	m_rect.setPosition(sf::Vector2f(m_sprite.getPosition().x, m_sprite.getPosition().y));
-	m_rect.setScale(m_sprite.getScale());
+	m_hitbox = sf::FloatRect(
+		m_sprite.getPosition().x - m_hitboxLeft,
+		m_sprite.getPosition().y - m_hitboxTop,
+		m_texture.getSize().x * m_sprite.getScale().x + m_hitboxWidth,
+		m_texture.getSize().y * m_sprite.getScale().y + m_hitboxHeight);
+	m_rect.setPosition(sf::Vector2f(m_hitbox.left, m_hitbox.top));
 }
 
 sf::Texture Entity::GetTexture() { return m_texture; }
@@ -95,3 +102,16 @@ sf::FloatRect Entity::GetHitbox()
 {
 	return m_hitbox;
 }
+
+void Entity::SetHitbox(float left, float top, float width, float height)
+{
+	m_hitboxLeft = left;
+	m_hitboxTop = top;
+	m_hitboxWidth = width;
+	m_hitboxHeight = height;
+
+	m_rect.setSize(sf::Vector2f(
+		m_texture.getSize().x * m_sprite.getScale().x + m_hitboxWidth,
+		m_texture.getSize().y * m_sprite.getScale().y + m_hitboxHeight));
+}
+

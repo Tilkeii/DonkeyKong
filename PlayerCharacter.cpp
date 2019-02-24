@@ -141,9 +141,9 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity, sf::Floa
 
 		m_isOnFloor = true;
 	}
-	std::cout << "on touche  " << typeid(*entity).name() << std::endl;
-	std::cout << "resultat up " << m_echelleCollisionUp << std::endl;
-	std::cout << "resultat down " << m_echelleCollisionDown << std::endl;
+	//std::cout << "on touche  " << typeid(*entity).name() << std::endl;
+	//std::cout << "resultat up " << m_echelleCollisionUp << std::endl;
+	//std::cout << "resultat down " << m_echelleCollisionDown << std::endl;
 }
 
 void PlayerCharacter::Jump()

@@ -9,7 +9,8 @@ Echelle::Echelle(sf::Texture text) : Entity(text)
 Echelle::Echelle(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
 {
 	ShowHitbox(sf::Color(0, 255, 0, 75));
-	m_sprite.setScale(1.54f,1.54f);
+	m_sprite.setScale(1.7f,2.f);
+	SetHitbox(0, 33.f, 0.f, 33.f);
 }
 
 Echelle::~Echelle()

@@ -24,11 +24,16 @@ public:
 	bool ShowHitbox(sf::Color color);
 	bool HideHitbox();
 	sf::FloatRect GetHitbox();
+	void SetHitbox(float left, float top, float width, float height);
 
 protected:
 	sf::Texture m_texture;
 	sf::Sprite m_sprite;
 	sf::FloatRect m_hitbox;
+	float m_hitboxLeft = 0.f;
+	float m_hitboxTop = 0.f;
+	float m_hitboxWidth = 0.f;
+	float m_hitboxHeight = 0.f;
 
 	sf::RectangleShape m_rect;
 
