@@ -37,12 +37,11 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_canJump)
 		Jump();
 	if(!m_isOnFloor)
-		m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravit�
+		m_velocity += sf::Vector2f(0.0f, GRAVITY * f_deltaTime); // appliquer une gravité
 	if (!m_canJump) { // si il est dans les airs
-		//m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravit�
 		if (m_sprite.getPosition().y - m_savePosWhenJump.y > m_jumpHeight && !m_jumpFall) {
 			std::cout << "diff " << m_sprite.getPosition().y - m_savePosWhenJump.y << std::endl;
-			m_velocity -= sf::Vector2f(0.0f, 400.0f * f_deltaTime); // appliquer une force vers le haut (pour le saut)
+			m_velocity -= sf::Vector2f(0.0f, 700.0f * f_deltaTime); // appliquer une force vers le haut (pour le saut)
 		}
 		else {
 			m_jumpFall = true;
