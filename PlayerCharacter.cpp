@@ -12,6 +12,8 @@ PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text)
 PlayerCharacter::PlayerCharacter(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
 {
 	ShowHitbox(sf::Color(255, 0, 0, 75));
+	m_sprite.setScale(3.f, 3.f);
+	SetHitbox(0.f, 0.f, 0.f, 0.f);
 }
 
 PlayerCharacter::~PlayerCharacter()
