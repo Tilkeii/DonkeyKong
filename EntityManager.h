@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "PlayerCharacter.h"
 
 class EntityManager
 {
@@ -9,6 +10,6 @@ public:
 
 public:
 	static std::vector<std::shared_ptr<Entity>> m_Entities;
-	static std::shared_ptr<Entity> GetPlayer();
+	static std::shared_ptr<PlayerCharacter> GetPlayer();
 };
 
