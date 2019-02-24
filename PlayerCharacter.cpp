@@ -11,6 +11,7 @@ PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text)
 
 PlayerCharacter::PlayerCharacter(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
 {
+	ShowHitbox(sf::Color(255, 0, 0, 75));
 }
 
 PlayerCharacter::~PlayerCharacter()
@@ -35,9 +36,10 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 		m_velocity.y += m_playerSpeed * f_deltaTime;
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space) && m_canJump)
 		Jump();
-
-	if (!m_canJump) { // si il est dans les airs
+	if(!m_isOnFloor)
 		m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
+	if (!m_canJump) { // si il est dans les airs
+		//m_velocity += sf::Vector2f(0.0f, 150.0f * f_deltaTime); // appliquer une gravité
 		if (m_sprite.getPosition().y - m_savePosWhenJump.y > m_jumpHeight && !m_jumpFall) {
 			std::cout << "diff " << m_sprite.getPosition().y - m_savePosWhenJump.y << std::endl;
 			m_velocity -= sf::Vector2f(0.0f, 400.0f * f_deltaTime); // appliquer une force vers le haut (pour le saut)
@@ -46,6 +48,8 @@ void PlayerCharacter::Update(sf::Time deltaTime)
 			m_jumpFall = true;
 		}
 	}
+
+	m_isOnFloor = false;
 
 	m_sprite.move(m_velocity);
 
@@ -56,9 +60,9 @@ void PlayerCharacter::Render(sf::RenderWindow *window)
 	Entity::Render(window);
 }
 
-void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
+void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity, sf::FloatRect intersection)
 {
-	//std::cout << "Collision detected with " << typeid(*entity).name() << std::endl;
+	std::cout << "Collision detected with " << typeid(*entity).name() << std::endl;
 	m_echelleCollisionUp = false;
 	m_echelleCollisionDown = false;
 
@@ -85,6 +89,22 @@ void PlayerCharacter::collisionDetected(std::shared_ptr<Entity> entity)
 
 	if (std::shared_ptr<Block> block = std::dynamic_pointer_cast<Block>(entity)) {
 		m_canJump = true;
+		sf::FloatRect hitboxPlayer = GetHitbox();
+		sf::FloatRect hitboxBlock = block->GetHitbox();
+
+		/*std::cout << 
+			"Sprite Height : " << hitboxPlayer.height << 
+			" Width : " << hitboxPlayer.width <<
+			" Left : " << hitboxPlayer.left <<
+			" Top : " << hitboxPlayer.top << std::endl;
+
+		std::cout <<
+			"Hitbox Height : " << hitboxPlayer.height <<
+			" Width : " << hitboxPlayer.width <<
+			" Left : " << hitboxPlayer.left <<
+			" Top : " << hitboxPlayer.top << std::endl;*/
+
+		m_isOnFloor = true;
 	}
 }
 
