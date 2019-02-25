@@ -10,7 +10,6 @@ PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text)
 	sf::IntRect rectSourceSprite(155, 3, 15, 16);
 	m_sprite = sf::Sprite(m_texture, rectSourceSprite);
 
-	ShowHitbox(sf::Color(255, 0, 0, 75));
 	m_sprite.setScale(3.f, 3.f);
 	SetHitbox(0.f, 0.f, (-(float)m_texture.getSize().x + 15.f) * 3, (-(float)m_texture.getSize().y + 16.f) * 3);
 	m_sprite.setPosition(sf::Vector2f(100.f + 70.f, BLOCK_SPACE * 5 - 16.f * 3));
@@ -18,7 +17,6 @@ PlayerCharacter::PlayerCharacter(sf::Texture text) : Entity(text)
 
 PlayerCharacter::PlayerCharacter(sf::Texture text, sf::Vector2f pos) : Entity(text, pos)
 {
-	ShowHitbox(sf::Color(255, 0, 0, 75));
 	m_sprite.setScale(3.f, 3.f);
 	SetHitbox(0.f, 0.f, 0.f, 0.f);
 }
